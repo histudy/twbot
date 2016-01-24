@@ -9,7 +9,7 @@ require_relative 'lib/doorkeeper.rb'
 require_relative 'lib/botUtil.rb'
 
 # load ENV from .env file
-Dotenv.load ".env.dev"
+Dotenv.load ".env"
 SAVEFILE= ENV["savefile"] || "savedEvents.yml"
 
 # load saved events data
