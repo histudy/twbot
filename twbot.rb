@@ -11,7 +11,7 @@ require_relative 'lib/doorkeeper.rb'
 require_relative 'lib/botUtil.rb'
 
 # load ENV from .env file
-Dotenv.load ".env.dev"
+Dotenv.load ".env"
 SAVEFILE= ENV["savefile"] || "savedEvents.yml"
 
 # setup twitter bot
@@ -39,17 +39,14 @@ DoorKeeper.getGroupEvents(ENV["group"]).each do | event |
   output = BotUtil.tweetMsg(event,hashtags,random_messages)
 
   # Output section
-#  bot.update(output)
-#  sleep(1)
-  puts output
-  puts
+  bot.update(output)
+  sleep(1)
 end
 
 # today event
 saved_events.each do | event |
   if saved_id.include?(event["id"]) and BotUtil.compDates(event["starts_at"]) == 0
     message = BotUtil.tweetMsg(event,hashtags,random_messages)
-    #bot.update(BotUtil.tweetMsg(event))
-    puts message
+    bot.update(message)
   end
 end

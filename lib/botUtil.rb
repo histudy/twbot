@@ -24,22 +24,27 @@ class BotUtil
         result = Date.new(time.year,time.month,time.day)
       elsif time.class == Date
         result = time
+      elsif time.class == String
+        result = timeToDate(Time.parse(time).timezone)
       end
       return result
     end
 
-    def compDates(target,base=Date.today,ignore_days=90)
+    def reminderMessage(left_days,ignore_days=90)
       result = ""
-      limit = (timeToDate(target) - timeToDate(base)).to_i
-
-      if limit == 0
+      if left_days == 0
         result = "本日開催です\!"
-      elsif limit == 1
+      elsif left_days == 1
         result = "明日開催です\!"
-      elsif limit < ignore_days
+      elsif left_days < ignore_days
         # 指定日時以上後なら日付を出さない
-        result = "あと#{limit}日です"
+        result = "あと#{left_days}日です"
       end
+      return result
+    end
+
+    def compDates(target,base=Date.today)
+      return (timeToDate(target) - timeToDate(base)).to_i
     end
 
     def getHashtag(tags,title,column=0)
@@ -80,12 +85,12 @@ class BotUtil
 
     # ファイルもしくはURLからYAMLをロードする
     # 第二引数にtrueを渡すとファイルがない場合作成する
-    def loadYmlData(path,create=true)
+    def loadYmlData(path,extractSingle = true,create=true)
       result = ""
       begin
         file = open(path).read
         result = YAML.load_stream(file)
-        if result.size == 1
+        if result.size == 1 and extractSingle
           result = result[0]
         end
       rescue Errno::ENOENT
@@ -100,6 +105,25 @@ class BotUtil
     def saveYmlData(path,data)
       file = File.open(path,"w")
       file.write(data)
+    end
+
+    def tweetMsg(hash,hashtags,random_messages)
+      start_time = Time.parse(hash["starts_at"]).timezone
+      end_time = Time.parse(hash["ends_at"]).timezone
+      period = "#{start_time.strftime("%Y/%m/%d %H:%M")} - #{end_time.strftime("%H:%M")}"
+      reminder = BotUtil.reminderMessage(BotUtil.compDates(start_time))
+      hashtag = BotUtil.getHashtag(hashtags,hash["title"])
+      random_message = BotUtil.getRandomMessage(random_messages,hashtag)
+
+      # Formatting hashtag for twitter
+      if hashtag != ""
+        hashtag = "##{hashtag}"
+      end
+
+      # Output data setting
+      output = "#{reminder} #{random_message}\n#{hash["title"]}\n#{period}\n#{hash["public_url"]}\n#{hashtag}"
+
+      return output
     end
   end
 end
