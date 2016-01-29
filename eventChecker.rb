@@ -1,4 +1,4 @@
-#!env ruby
+#!/usr/bin/env ruby
 
 # import RubyGems
 require 'bundler'
