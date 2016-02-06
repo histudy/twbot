@@ -48,5 +48,6 @@ saved_events.each do | event |
   if saved_id.include?(event["id"]) and BotUtil.compDates(event["starts_at"]) == 0
     message = BotUtil.tweetMsg(event,hashtags,random_messages)
     bot.update(message)
+    sleep(2)
   end
 end
