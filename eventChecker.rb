@@ -14,7 +14,6 @@ SAVEFILE= ENV["savefile"] || "savedEvents.yml"
 
 # load saved events data
 savedEvents = BotUtil.loadYmlData(SAVEFILE)
-p savedEvents
 
 # main Script
 data = ""
