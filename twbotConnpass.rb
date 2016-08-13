@@ -11,7 +11,7 @@ require_relative 'lib/connpass.rb'
 require_relative 'lib/botUtilConnpass.rb'
 
 # load ENV from .env file
-Dotenv.load ".env.dev"
+Dotenv.load ".env"
 SAVEFILE= ENV["savefile"] || "savedEvents.yml"
 
 # setup twitter bot
@@ -38,8 +38,7 @@ Connpass.getGroupEvents(ENV["group"])["events"].each do | event |
   output = BotUtil.tweetMsg(event,hashtags,random_messages)
 
   # Output section
-  #bot.update(output)
-  puts output
+  bot.update(output)
   sleep(1)
 end
 
@@ -47,7 +46,7 @@ end
 saved_events.each do | event |
   if saved_id.include?(event["id"]) and BotUtil.compDates(event["starts_at"]) == 0
     message = BotUtil.tweetMsg(event,hashtags,random_messages)
-    #bot.update(message)
+    bot.update(message)
     sleep(2)
   end
 end
