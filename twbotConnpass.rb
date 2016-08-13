@@ -30,7 +30,7 @@ random_messages = BotUtil.loadYmlData(ENV["randomMessages"])
 
 # Load saved events
 saved_events = BotUtil.loadYmlData(SAVEFILE,false)
-saved_id = saved_events.map{|item| item["id"]}
+saved_id = saved_events.map{|item| item["event_id"]}
 
 # Main Scripts
 Connpass.getGroupEvents(ENV["group"])["events"].each do | event |
@@ -44,7 +44,7 @@ end
 
 # today event
 saved_events.each do | event |
-  if saved_id.include?(event["id"]) and BotUtil.compDates(event["starts_at"]) == 0
+  if saved_id.include?(event["event_id"]) and BotUtil.compDates(event["started_at"]) == 0
     message = BotUtil.tweetMsg(event,hashtags,random_messages)
     bot.update(message)
     sleep(2)
