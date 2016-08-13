@@ -8,7 +8,7 @@ Bundler.require
 
 # import My libs
 require_relative 'lib/doorkeeper.rb'
-require_relative 'lib/botUtil.rb'
+require_relative 'lib/botUtilDoorkeeper.rb'
 
 # load ENV from .env file
 Dotenv.load ".env"
