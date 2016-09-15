@@ -17,10 +17,11 @@ savedEvents = BotUtil.loadYmlData(SAVEFILE)
 
 # main Script
 data = ""
-Connpass.getGroupEvents(ENV["group"])["events"].each do | event |
-  eventData = event
-  eventData.delete("description")
-  data << eventData.to_yaml
+Connpass.getGroupEvents(ENV["group"])["events"].each do | eventData |
+  if BotUtil.compDates(eventData["started_at"]) >= 0
+    eventData.delete("description")
+    data << eventData.to_yaml
+  end
 end
 
 # save events data
