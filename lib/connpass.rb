@@ -1,7 +1,7 @@
 require 'open-uri'
 require 'json'
 
-API = "http://connpass.com/api/v1/event/"
+API = "https://connpass.com/api/v1/event/"
 
 class Connpass
   class << self
